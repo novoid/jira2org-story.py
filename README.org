@@ -60,10 +60,110 @@ version:    Time-stamp: <2016-05-13 14:00:47 karl.voit>
 
 ** Example Output
 
-As of [2016-04-24 Sun]:
+Following headings are an example output when I call my script with
+the parameter "1234".
 
-#+BEGIN_SRC sh :results output :wrap quote
-python ./jira2org-story.py
-#+END_SRC
+Please note that I make use of task dependencies using TRIGGER and
+BLOCKER properties according to [[http://orgmode.org/worg/org-contrib/org-depend.html][org-depend.el]].
 
-FIXXME
+I did create a customized link so that "IPD:1234" links to its Jira
+representative "https://product.infonova.at/jira/browse/IPD-1234".
+
+Usually, I manually do search&replace "i1234" with a human-readable
+short version of the story title.
+
+You might wonder about the status "NEXT". I am using "TODO" to define
+a task which will be of interest in future (but not now) and "NEXT"
+for a task that can be done *now*.
+
+This structure is in constant change as I add and remove things or
+modify my Org-mode-related workflows.
+
+*** TODO [[IPD:1234]] This Is The Title Of The Story [0/7]                   :US_i1234:
+:PROPERTIES:
+:CREATED:  [2016-05-14 Sat 19:14]
+:ID: 2016-05-14-Story-i1234
+:END:
+
+| [[IPD:1234][1234]] | This Is The Title Of The Story | Joe.Assignee |
+
+**** STARTED create Jira [[IPD:1234]]
+:PROPERTIES:
+:CREATED:  [2016-05-14 Sat 19:14]
+:ID: 2016-05-14-i1234-create-jira-ipd
+:BLOCKER:
+:TRIGGER:  2016-05-14-i1234-define-champ(NEXT) 2016-05-14-i1234-estimation(NEXT)
+:END:
+
+- fill out:
+  - [X] set reporter
+  - [ ] set level red
+  - [ ] fixVersion
+
+**** NEXT create Confluence page with template
+SCHEDULED: <2016-05-14>
+:PROPERTIES:
+:CREATED:  [2016-05-14 Sat 19:14]
+:ID:    2016-05-14-i1234-create-confluence-page
+:BLOCKER:
+:TRIGGER:  2016-05-14-i1234-write-acceptance-criteria(NEXT)
+:END:
+
+- fill out:
+  - [ ] add Jira-Link [[IPD:1234]]
+  - [ ] PO
+  - [ ] Title
+  - [ ] Business Value
+- [ ] add Confluence-short-URL to story table above
+
+**** TODO write Acceptance Criteria, Docu, Perms
+:PROPERTIES:
+:CREATED:  [2016-05-14 Sat 19:14]
+:ID: 2016-05-14-i1234-write-acceptance-criteria
+:BLOCKER: 2016-05-14-i1234-create-confluence-page
+:TRIGGER: 2016-05-14-i1234-confidence-green(NEXT) 2016-05-14-i1234-hand-over-team(NEXT)
+:END:
+
+**** TODO add Champ to Confluence and Jira                                            :refinement:
+:PROPERTIES:
+:CATEGORY: refinement
+:CREATED:  [2016-05-14 Sat 19:14]
+:ID: 2016-05-14-i1234-define-champ
+:BLOCKER:
+:END:
+
+**** TODO get Estimation on [[IPD:1234]]                                                  :refinement:
+:PROPERTIES:
+:CREATED:  [2016-05-14 Sat 19:14]
+:CATEGORY: refinement
+:ID: 2016-05-14-i1234-estimation
+:BLOCKER: 2016-05-14-i1234-create-jira-ipd
+:TRIGGER:
+:END:
+
+- Estimation:
+
+**** TODO get confidence-level green on [[IPD:1234]]                                      :refinement:
+:PROPERTIES:
+:CATEGORY: refinement
+:CREATED:  [2016-05-14 Sat 19:14]
+:ID: 2016-05-14-i1234-confidence-green
+:BLOCKER: 2016-05-14-i1234-write-acceptance-criteria 2016-05-14-i1234-estimation
+:TRIGGER:
+:END:
+
+**** TODO hand over to team
+:PROPERTIES:
+:CREATED:  [2016-05-14 Sat 19:14]
+:BLOCKER: 2016-05-14-i1234-write-acceptance-criteria 2016-05-14-i1234-estimation
+:ID: 2016-05-14-i1234-hand-over-team
+:TRIGGER:  2016-05-14-i1234-accept(WAITING) 2016-05-14-Story-i1234(TEAM)
+:END:
+
+**** acceptance + finish US
+:PROPERTIES:
+:CREATED:  [2016-05-14 Sat 19:14]
+:ID: 2016-05-14-i1234-accept
+:BLOCKER: 2016-05-14-i1234-hand-over-team
+:TRIGGER: 2016-05-14-Story-i1234(DONE)
+:END:
