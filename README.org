@@ -58,6 +58,20 @@ bugreports: via GitHub
 version:    Time-stamp: <2016-05-13 14:00:47 karl.voit>
 #+END_quote
 
+** Motivation and Similar Projects
+
+I work as a Product Owner in an agile Scrum process. To simplify my
+digial life, I use Org-mode for almost everything there is.
+
+For managing my scrum stories, I was using an Org-mode representation
+long before I extracted things from Jira via scripts. I did not want
+to change how I am using Org-mode for Jira stories.
+
+This is why I do not use ready-to-use projects that mirror or
+synchronize Jira with Org-mode:
+- [[https://www.emacswiki.org/emacs/OrgJiraMode][Org Jira Mode]]
+- [[https://github.com/baohaojun/org-jira][org-jira]]
+
 ** Example
 
 Following headings are an example output when I call my script with
