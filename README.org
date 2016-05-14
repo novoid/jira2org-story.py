@@ -58,10 +58,16 @@ bugreports: via GitHub
 version:    Time-stamp: <2016-05-13 14:00:47 karl.voit>
 #+END_quote
 
-** Example Output
+** Example
 
 Following headings are an example output when I call my script with
 the parameter "1234".
+
+Usually, I do use babel to execute the script:
+
+: #+BEGIN_SRC sh :results output raw :dir c:/Users/karl.voit/src/jira2org-story.py/
+: c:/Users/karl.voit/src/jira2org-story.py/jira2org-story.py 1234
+: #+END_SRC
 
 Please note that I make use of task dependencies using TRIGGER and
 BLOCKER properties according to [[http://orgmode.org/worg/org-contrib/org-depend.html][org-depend.el]].
