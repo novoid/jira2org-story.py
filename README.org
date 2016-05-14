@@ -1,0 +1,69 @@
+* jira2org-story.py - Extract Jira Issues and Generate Org-mode Headings
+
+This Python script fetches information of Jira issues and
+returns an Org-mode representation of those issues in Org-mode format.
+This Org-mode format is highly specific for my own purpose but you are
+able to modify this structure to meet your requirements. Therefore,
+this script works as a blueprint or template for you.
+
+You can use one to many Jira issue numbers (for stories) as command
+line parameter. If you use Jira issues that are Epics, all
+corresponding stories are retrieved as well.
+
+- Author: Karl Voit
+- License: GPLv3 or higher
+- Coding was started in May 2016
+
+** Installation
+
+1. Install Python version 2.x
+2. Install Python Jira library via ~pip install jira~ or similar
+3. Invoke the script via ~python ./jira2org-story.py~
+4. Generate the file ~jiraconfig.py~
+   - similar to the template from the previous script output
+   - in the same directory as the other Python script
+5. Re-start the script via ~python ./jira2org-story.py 1234~ and it
+   should give you a similar output as stated below
+
+** Command Line Parameters
+
+#+BEGIN_SRC sh :results output :wrap quote
+python ./jira2org-story.py --help
+#+END_SRC
+
+#+RESULTS:
+#+BEGIN_quote
+usage: jira2org-story.py [-h] [--version] IPD [IPD ...]
+
+This tool retrieves a Jira issue and returns an Org-mode
+representation according to the system of Karl Voit.
+
+The output is highly specific for my personal usage. If you want to have
+a similar functionality, you have to adapt it to your needs. This would
+require at least a search&replace of "IPD" with the Jira project ID of
+your choice, all Jira URLs, and the custom org-mode link "ipd:1234".
+
+positional arguments:
+  IPD         One or many IPD numbers of stories or epics (without "IPD-"
+              prefix)
+
+optional arguments:
+  -h, --help  show this help message and exit
+  --version   show program's version number and exit
+
+autor:      Karl Voit <tools@Karl-Voit.at>
+license:    GPL v3 or any later version
+URL:        https://github.com/novoid/jira2org-story.py/
+bugreports: via GitHub
+version:    Time-stamp: <2016-05-13 14:00:47 karl.voit>
+#+END_quote
+
+** Example Output
+
+As of [2016-04-24 Sun]:
+
+#+BEGIN_SRC sh :results output :wrap quote
+python ./jira2org-story.py
+#+END_SRC
+
+FIXXME
