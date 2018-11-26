@@ -1,6 +1,6 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 # -*- coding: utf-8 -*-
-PROG_VERSION = u"Time-stamp: <2016-05-13 14:00:47 karl.voit>"
+PROG_VERSION = u"Time-stamp: <2017-04-10 17:50:01 karl.voit>"
 
 import sys
 import os
@@ -89,7 +89,7 @@ def thing2string(data, addlink=False):
 def orglink(text):
     "Takes a text like 'IPD-1234' and generates an Org-mode link"
 
-    return '[[' + text.replace('IPD-', 'https://product.infonova.at/jira/browse/IPD-') + '][' + text.replace('IPD-', '') + ']]'
+    return '[[' + text.replace('IPD-', 'https://r6portal-defects.infonova.com/browse/IPD-') + '][' + text.replace('IPD-', '') + ']]'
 
 
 def get(issues, ipd, query):
@@ -154,7 +154,7 @@ def retrieve_data_from_jira(ipds):
         print_line("ERROR: Could not find Python module \"JIRA\".\nPlease install it, e.g., with \"sudo pip install jira\".")
         sys.exit(12)
 
-    jira = JIRA('https://product.infonova.at/jira/', basic_auth=(jiraconfig.JIRA_USER, jiraconfig.JIRA_PASSWORD))
+    jira = JIRA('https://r6portal-defects.infonova.com/', basic_auth=(jiraconfig.JIRA_USER, jiraconfig.JIRA_PASSWORD))
 
     query = 'key = "IPD-' + '" or key = "IPD-'.join(ipds) + '" ORDER BY key'
     queryissues = jira.search_issues(query)
@@ -198,23 +198,22 @@ def print_issue(issue):
 :ID: ''' + orgdate + '''-Story-''' + short)
     print_line(u''':END:
 
- | *IPD* | *Confluence* | *Champ* |''')
+ | *IPD* | *Confluence*         | *Champ* |''')
 
     if issue['''assignee''']:
-        champ = issue['''assignee''']
+        champ = '@' + issue['''assignee''']
     else:
-        champ = '''-'''
+        champ = '''@champ'''
 
     print_line(u''' | [[IPD:''' + issue['''key'''] + '''][''' + issue['''key'''] + ''']]  | ''' + \
                issue['''summary'''] + ''' | ''' + champ + ''' |
 
-*** STARTED create Jira [[IPD:%s]]''' % issue['''key'''])
+*** DONE create Jira [[IPD:%s]]                                      :USprep:''' % issue['''key'''])
     print_line(u''':PROPERTIES:
 :CREATED:  [''' + orgtime + ''']
 :ID: ''' + orgdate + '''-''' + short + '''-create-jira-ipd
 :BLOCKER:
-:TRIGGER:  ''' + orgdate + '''-''' + short + '''-define-champ(NEXT) ''' + \
-               orgdate + '''-''' + short + '''-estimation(NEXT)
+:TRIGGER:
 :END:
 
 - fill out:
@@ -222,13 +221,13 @@ def print_issue(issue):
   - [ ] set level red
   - [ ] fixVersion
 
-*** NEXT create Confluence page with template
+*** NEXT create Confluence page with template                                                   :USprep:
 SCHEDULED: <''' + orgdate + '''>
 :PROPERTIES:
 :CREATED:  [''' + orgtime + ''']
 :ID:    ''' + orgdate + '''-''' + short + '''-create-confluence-page
 :BLOCKER:
-:TRIGGER:  ''' + orgdate + '''-''' + short + '''-write-acceptance-criteria(NEXT)
+:TRIGGER:  ''' + orgdate + '''-''' + short + '''-write-acceptance-criteria(NEXT) ''' + orgdate + '''-''' + short + '''-DoR(NEXT)
 :END:
 
 - fill out:
@@ -238,16 +237,48 @@ SCHEDULED: <''' + orgdate + '''>
   - [ ] Business Value
 - [ ] add Confluence-short-URL to story table above
 
-*** TODO write Acceptance Criteria, Docu, Perms
+*** NEXT DoR checklist written                                                     :USprep:
+SCHEDULED: <''' + orgdate + '''>
+:PROPERTIES:
+:CREATED:  [''' + orgtime + ''']
+:ID:    ''' + orgdate + '''-''' + short + '''-DoR-checklist-written
+:BLOCKER:
+:TRIGGER:
+:END:
+
+*** TODO write Acceptance Criteria                                                   :USprep:
 :PROPERTIES:
 :CREATED:  [''' + orgtime + ''']
 :ID: ''' + orgdate + '''-''' + short + '''-write-acceptance-criteria
 :BLOCKER: ''' + orgdate + '''-''' + short + '''-create-confluence-page
 :TRIGGER: ''' + orgdate + '''-''' + short + '''-confidence-green(NEXT) ''' + \
-               orgdate + '''-''' + short + '''-hand-over-team(NEXT)
+               orgdate + '''-''' + short + '''-hand-over-team(NEXT) ''' + \
+               orgdate + '''-''' + short + '''-story-signoff(NEXT)
 :END:
 
-*** TODO add Champ to Confluence and Jira                                    :refinement:
+*** DoR                                                  :@underscore:
+:PROPERTIES:
+:CREATED:  [''' + orgtime + ''']
+:ID: ''' + orgdate + '''-''' + short + '''-DoR
+:CATEGORY: refinement
+:BLOCKER: ''' + orgdate + '''-''' + short + '''-create-confluence-page
+:TRIGGER:
+:END:
+
+- [ ] Acceptance criteria OK
+- [ ] Assumptions & constraints checked
+- [ ] External & internal dependencies checked
+- [ ] Define impact on testing
+- [ ] Impacted Documentation check
+
+*** PM Signoff                                                   :USprep:
+:PROPERTIES:
+:CREATED:  [''' + orgtime + ''']
+:ID: ''' + orgdate + '''-''' + short + '''-story-signoff
+:BLOCKER: ''' + orgdate + '''-''' + short + '''-write-acceptance-criteria
+:END:
+
+*** NEXT add Champ to Confluence and Jira                                    :@underscore:''' + champ + '''
 :PROPERTIES:
 :CATEGORY: refinement
 :CREATED:  [''' + orgtime + ''']
@@ -256,7 +287,7 @@ SCHEDULED: <''' + orgdate + '''>
 :END:
 
 *** TODO get Estimation on [[IPD:''' + issue['''key'''] + \
-               ''']]                                           :refinement:
+               ''']]                                           :@underscore:
 :PROPERTIES:
 :CREATED:  [''' + orgtime + ''']
 :CATEGORY: refinement
@@ -268,7 +299,7 @@ SCHEDULED: <''' + orgdate + '''>
 - Estimation:
 
 *** TODO get confidence-level green on [[IPD:''' + issue['''key'''] + \
-               ''']]                                :refinement:
+               ''']]                                :@underscore:
 :PROPERTIES:
 :CATEGORY: refinement
 :CREATED:  [''' + orgtime + ''']
@@ -282,20 +313,26 @@ SCHEDULED: <''' + orgdate + '''>
 :PROPERTIES:
 :CREATED:  [''' + orgtime + ''']
 :BLOCKER: ''' + orgdate + '''-''' + short + '''-write-acceptance-criteria ''' + \
-               orgdate + '''-''' + short + '''-estimation
+               orgdate + '''-''' + short + '''-estimation ''' + orgdate + '''-''' + short + '''-DoR
 :ID: ''' + orgdate + '''-''' + short + '''-hand-over-team
 :TRIGGER:  ''' + orgdate + '''-''' + short + '''-accept(WAITING) ''' + \
                orgdate + '''-Story-''' + short + '''(TEAM)
 :END:
 
-*** acceptance + finish US
+*** acceptance                                                  :@underscore:
 :PROPERTIES:
 :CREATED:  [''' + orgtime + ''']
 :ID: ''' + orgdate + '''-''' + short + '''-accept
 :BLOCKER: ''' + orgdate + '''-''' + short + '''-hand-over-team
-:TRIGGER: ''' + orgdate + '''-Story-''' + short + '''(DONE)
 :END:
-''')
+
+*** close US
+:PROPERTIES:
+:CREATED:  [''' + orgtime + ''']
+:ID: ''' + orgdate + '''-''' + short + '''-close
+:BLOCKER: ''' + orgdate + '''-''' + short + '''-accept
+:TRIGGER: ''' + orgdate + '''-Story-''' + short + '''(DONE)
+:END:''')
 
 
 def main():

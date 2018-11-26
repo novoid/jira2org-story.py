@@ -31,8 +31,7 @@ corresponding stories are retrieved as well.
 python ./jira2org-story.py --help
 #+END_SRC
 
-#+RESULTS:
-#+BEGIN_quote
+#+BEGIN_src
 usage: jira2org-story.py [-h] [--version] IPD [IPD ...]
 
 This tool retrieves a Jira issue and returns an Org-mode
@@ -56,7 +55,7 @@ license:    GPL v3 or any later version
 URL:        https://github.com/novoid/jira2org-story.py/
 bugreports: via GitHub
 version:    Time-stamp: <2016-05-13 14:00:47 karl.voit>
-#+END_quote
+#+END_src
 
 ** Motivation and Similar Projects
 
@@ -75,7 +74,7 @@ synchronize Jira with Org-mode:
 ** Example
 
 Following headings are an example output when I call my script with
-the parameter "1234".
+the parameter "1234" (as of 2016-05-14).
 
 Usually, I do use babel to execute the script:
 
@@ -83,18 +82,20 @@ Usually, I do use babel to execute the script:
 : c:/Users/karl.voit/src/jira2org-story.py/jira2org-story.py 1234
 : #+END_SRC
 
-Please note that I make use of task dependencies using TRIGGER and
-BLOCKER properties according to [[http://orgmode.org/worg/org-contrib/org-depend.html][org-depend.el]].
+Some remarks:
 
-I did create a customized link so that "IPD:1234" links to its Jira
-representative "https://product.infonova.at/jira/browse/IPD-1234".
+- Please note that I make use of task dependencies using TRIGGER and
+  BLOCKER properties according to [[http://orgmode.org/worg/org-contrib/org-depend.html][org-depend.el]].
 
-Usually, I manually do search&replace "i1234" with a human-readable
-short version of the story title.
+- I did create a customized link so that "IPD:1234" links to its Jira
+  representative "https://product.infonova.at/jira/browse/IPD-1234".
 
-You might wonder about the status "NEXT". I am using "TODO" to define
-a task which will be of interest in future (but not now) and "NEXT"
-for a task that can be done *now*.
+- Usually, I manually do search&replace "i1234" with a human-readable
+  short version of the story title.
+
+- You might wonder about the status "NEXT". I am using "TODO" to
+  define a task which will be of interest in future (but not now) and
+  "NEXT" for a task that can be done *now*.
 
 This structure is in constant change as I add and remove things or
 modify my Org-mode-related workflows.
