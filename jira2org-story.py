@@ -27,7 +27,7 @@ your choice, all Jira URLs, and the custom org-mode link "ipd:1234".
 
 EPILOG=u'''autor:      Karl Voit <tools@Karl-Voit.at>
 license:    GPL v3 or any later version
-URL:        https://github.com/novoid/FIXXME/
+URL:        https://github.com/novoid/jira2org-story.py/
 bugreports: via GitHub
 version:    ''' + PROG_VERSION + '\n'
 
